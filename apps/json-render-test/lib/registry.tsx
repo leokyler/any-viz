@@ -2,10 +2,11 @@
 import { defineRegistry } from "@json-render/react";
 import { shadcnComponents } from "@json-render/shadcn";
 import { catalog } from "./catalog";
+import { Card } from "./Card";
 
 export const { registry } = defineRegistry(catalog, {
   components: {
-    Card: shadcnComponents.Card,
+    Card,
     Stack: shadcnComponents.Stack,
     Heading: shadcnComponents.Heading,
     Button: shadcnComponents.Button,
