@@ -18,7 +18,7 @@ export function Card({ props, children }: BaseComponentProps<CardProps>) {
   return (
     <div
       className={[
-        "rounded-xl border border-gray-200 bg-blue-500 shadow-md hover:shadow-lg transition-shadow duration-200 p-6",
+        "rounded-xl border border-gray-200 bg-white shadow-sm p-6",
         maxWidthClass,
         centeredClass,
         props.className ?? "",

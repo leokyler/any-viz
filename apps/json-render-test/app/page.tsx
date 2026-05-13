@@ -10,6 +10,7 @@ import {
   useUIStream,
 } from "@json-render/react";
 import { registry } from "@/lib/registry";
+import { warehouseState } from "@/lib/warehouse-data";
 
 export default function Page() {
   const { spec, isStreaming, send } = useUIStream({
@@ -23,7 +24,7 @@ export default function Page() {
   };
 
   return (
-    <StateProvider initialState={{}}>
+    <StateProvider initialState={warehouseState}>
       <VisibilityProvider>
         <ActionProvider
           handlers={{

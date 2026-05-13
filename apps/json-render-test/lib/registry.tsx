@@ -3,10 +3,16 @@ import { defineRegistry } from "@json-render/react";
 import { shadcnComponents } from "@json-render/shadcn";
 import { catalog } from "./catalog";
 import { Card } from "./Card";
+import { LineChart } from "./LineChart";
+import { BarChart } from "./BarChart";
+import { PieChart } from "./PieChart";
 
 export const { registry } = defineRegistry(catalog, {
   components: {
     Card,
+    LineChart,
+    BarChart,
+    PieChart,
     Stack: shadcnComponents.Stack,
     Heading: shadcnComponents.Heading,
     Button: shadcnComponents.Button,
