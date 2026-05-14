@@ -2,20 +2,21 @@
 
 import { useState, useCallback } from "react";
 import { createSpecStreamCompiler } from "@json-render/core";
+import type { Spec } from "@json-render/core";
 
 interface UseUIStreamOptions {
   api: string;
 }
 
 interface UseUIStreamResult {
-  spec: unknown;
+  spec: Spec | null;
   isStreaming: boolean;
   send: (prompt: string, dataMeta?: string) => Promise<void>;
   error: string | null;
 }
 
 export function useUIStream({ api }: UseUIStreamOptions): UseUIStreamResult {
-  const [spec, setSpec] = useState<unknown>(null);
+  const [spec, setSpec] = useState<Spec | null>(null);
   const [isStreaming, setIsStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -25,7 +26,7 @@ export function useUIStream({ api }: UseUIStreamOptions): UseUIStreamResult {
       setError(null);
       setSpec(null);
 
-      const compiler = createSpecStreamCompiler();
+      const compiler = createSpecStreamCompiler<Spec>();
 
       try {
         const response = await fetch(api, {
