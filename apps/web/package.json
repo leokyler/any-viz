@@ -11,10 +11,19 @@
     "check-types": "next typegen && tsc --noEmit"
   },
   "dependencies": {
+    "@ai-sdk/deepseek": "^2.0.35",
+    "@json-render/core": "^0.19.0",
+    "@json-render/react": "^0.19.0",
+    "@json-render/shadcn": "^0.19.0",
     "@repo/ui": "workspace:*",
+    "ai": "^6.0.182",
     "next": "16.2.0",
-    "react": "^19.2.0",
-    "react-dom": "^19.1.0"
+    "papaparse": "^5.5.3",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "recharts": "^3.8.1",
+    "xlsx": "^0.18.5",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^16.2.0",
@@ -23,6 +32,7 @@
     "@repo/typescript-config": "workspace:*",
     "@tailwindcss/postcss": "^4.1.5",
     "@types/node": "^22.15.30",
+    "@types/papaparse": "^5.5.2",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.1",
     "autoprefixer": "^10.4.20",
