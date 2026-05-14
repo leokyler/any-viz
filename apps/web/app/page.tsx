@@ -7,9 +7,9 @@ import {
   VisibilityProvider,
   ActionProvider,
   ValidationProvider,
+  useUIStream,
 } from "@json-render/react";
 import { registry } from "@/lib/registry";
-import { useUIStream } from "@/lib/use-ui-stream";
 
 interface DataState {
   [key: string]: Record<string, unknown>[];
@@ -19,17 +19,16 @@ interface Message {
   id: string;
   role: "user" | "assistant";
   content: string;
-  spec?: unknown;
 }
 
 export default function Page() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [dataState, setDataState] = useState<DataState>({});
-  const [dataMeta, setDataMeta] = useState<string>("");
   const [input, setInput] = useState("");
   const { spec, isStreaming, send, error } = useUIStream({ api: "/api/generate" });
   const chatEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const dataMetaRef = useRef<string>("");
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -47,7 +46,9 @@ export default function Page() {
       const data = await res.json();
 
       setDataState((prev) => ({ ...prev, ...data.state }));
-      setDataMeta((prev) => (prev ? `${prev}\n\n${data.dataMeta}` : data.dataMeta));
+      dataMetaRef.current = dataMetaRef.current
+        ? `${dataMetaRef.current}\n\n${data.dataMeta}`
+        : data.dataMeta;
 
       const rowCount = Object.values(data.state as Record<string, unknown[]>)[0]?.length ?? 0;
       setMessages((prev) => [
@@ -85,22 +86,8 @@ export default function Page() {
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
 
-    await send(userMessage.content, dataMeta);
+    await send(userMessage.content, { dataMeta: dataMetaRef.current });
   };
-
-  useEffect(() => {
-    if (spec && !isStreaming) {
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: crypto.randomUUID(),
-          role: "assistant",
-          content: "",
-          spec,
-        },
-      ]);
-    }
-  }, [isStreaming]);
 
   return (
     <StateProvider initialState={dataState}>
@@ -108,7 +95,6 @@ export default function Page() {
         <ActionProvider handlers={{}}>
           <ValidationProvider customFunctions={{}}>
             <div className="flex flex-col h-screen bg-gray-50 dark:bg-gray-950">
-              {/* Header */}
               <header className="flex items-center justify-between border-b bg-white px-6 py-4 dark:bg-gray-900">
                 <h1 className="text-xl font-bold text-gray-900 dark:text-white">
                   AnyViz
@@ -136,7 +122,6 @@ export default function Page() {
                 </div>
               </header>
 
-              {/* Chat area */}
               <div className="flex-1 overflow-y-auto px-6 py-4">
                 {messages.length === 0 && !spec && (
                   <div className="flex h-full items-center justify-center">
@@ -170,14 +155,14 @@ export default function Page() {
                           : "bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
                       }`}
                     >
-                      {msg.content && <p className="whitespace-pre-wrap">{msg.content}</p>}
+                      <p className="whitespace-pre-wrap">{msg.content}</p>
                     </div>
                   </div>
                 ))}
 
                 {spec && (
-                  <div className="mb-4 max-w-[80%]">
-                    <div className="rounded-2xl bg-white p-4 shadow-sm dark:bg-gray-800">
+                  <div className="mb-4 flex justify-start">
+                    <div className="max-w-[80%] rounded-2xl bg-white p-4 shadow-sm dark:bg-gray-800">
                       <Renderer
                         spec={spec}
                         registry={registry}
@@ -190,7 +175,7 @@ export default function Page() {
                 {error && (
                   <div className="mb-4 flex justify-start">
                     <div className="max-w-[80%] rounded-2xl bg-red-50 px-4 py-3 text-red-700">
-                      出错了: {error}
+                      出错了: {error.message}
                     </div>
                   </div>
                 )}
@@ -198,7 +183,6 @@ export default function Page() {
                 <div ref={chatEndRef} />
               </div>
 
-              {/* Input bar */}
               <div className="border-t bg-white px-6 py-4 dark:bg-gray-900">
                 <form onSubmit={handleSubmit} className="flex gap-3">
                   <input
