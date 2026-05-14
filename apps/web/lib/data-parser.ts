@@ -121,10 +121,3 @@ function suggestCharts(fields: FieldMeta[]): string {
   return suggestions.join("、");
 }
 
-export function buildState(datasets: ParsedDataset[]): DataState {
-  const state: DataState = {};
-  for (const ds of datasets) {
-    state[ds.stateKey] = ds.data;
-  }
-  return state;
-}
