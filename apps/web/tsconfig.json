@@ -6,6 +6,9 @@
         "name": "next"
       }
     ],
+    "paths": {
+      "@/*": ["./lib/*", "./*"]
+    },
     "strictNullChecks": true
   },
   "include": [
