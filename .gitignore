@@ -28,9 +28,14 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+.env
 
 # turbo
 .turbo
 
 # ui
 dist/
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
